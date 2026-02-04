@@ -71,6 +71,7 @@ Show Details
 Claude Login
 Codex Login
 Antigravity Login
+Logout Provider
 EOF
 )
 
@@ -85,6 +86,8 @@ case "$choice" in
     omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_pkg); $(declare -f login_codex); login_codex'" ;;
   "Antigravity Login")
     omarchy-launch-floating-terminal-with-presentation "sh -lc 'SCRIPT_DIR=\"$SCRIPT_DIR\"; $(declare -f ensure_bun); $(declare -f ensure_pkg); $(declare -f login_antigravity); login_antigravity'" ;;
+  "Logout Provider")
+    "$SCRIPT_DIR/llm-usage-open-terminal" "$SCRIPT_DIR/llm-usage-logout" ;;
   *)
     exit 0 ;;
 esac
