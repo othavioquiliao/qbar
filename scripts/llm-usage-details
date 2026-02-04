@@ -4,13 +4,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 OUT=$($SCRIPT_DIR/waybar-llm-usage.sh)
-python3 - <<'PY'
-import json,os
-raw=os.environ.get("OUT","")
+printf '%s' "$OUT" | python3 - <<'PY'
+import json,sys
 try:
-    data=json.loads(raw)
+    data=json.load(sys.stdin)
     print(data.get("tooltip", ""))
 except Exception:
+    raw=sys.stdin.read()
     print("(failed to parse tooltip)")
     print(raw)
 PY
