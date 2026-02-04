@@ -77,7 +77,9 @@ if [ -f "$CLAUDE_CREDS" ]; then
     USAGE=$(curl -s --max-time 5 "https://api.anthropic.com/api/oauth/usage" \
       -H "Authorization: Bearer $ACCESS_TOKEN" \
       -H "anthropic-beta: oauth-2025-04-20" 2>/dev/null)
-    if echo "$USAGE" | jq -e '.five_hour' &>/dev/null; then
+    if echo "$USAGE" | jq -e '.error.error_code=="token_expired"' >/dev/null 2>&1; then
+      C_PLAN="token expired"
+    elif echo "$USAGE" | jq -e '.five_hour' &>/dev/null; then
       C5_USED=$(echo "$USAGE" | jq -r '.five_hour.utilization // 0' | xargs printf "%.0f")
       C7_USED=$(echo "$USAGE" | jq -r '.seven_day.utilization // 0' | xargs printf "%.0f")
       C5_REM=$((100 - C5_USED))
@@ -166,9 +168,14 @@ fi
 # --- Bar Text ---
 Cld=$(fmt_span "Cld" "$C5_REM")
 Cdx=$(fmt_span "Cdx" "$X5_REM")
-AG=$(fmt_span "AG" "$AG_CLAUDE")
 SEP="<span weight='bold'>·</span>"
-TEXT="| ${Cld} ${SEP} ${Cdx} ${SEP} ${AG} |"
+
+if [ "$AG_ACCOUNT" != "?" ]; then
+  AG=$(fmt_span "AG" "$AG_CLAUDE")
+  TEXT="| ${Cld} ${SEP} ${Cdx} ${SEP} ${AG} |"
+else
+  TEXT="| ${Cld} ${SEP} ${Cdx} |"
+fi
 
 # --- Tooltip ---
 line_fmt() {
@@ -180,6 +187,9 @@ line_fmt() {
 }
 
 T="━━━ Claude (${C_PLAN}) ━━━\\n"
+if [ "$C_PLAN" = "token expired" ]; then
+  T+="⚠️ Token expirou. Faça login no Claude CLI.\\n"
+fi
 T+="$(line_fmt "Claude 4.5 Opus" "$C5_REM" "$C5_RESET_ISO" "$C5_RESET")\\n"
 T+="$(line_fmt "Weekly" "$C7_REM" "$C7_RESET_ISO" "$C7_RESET")\\n"
 

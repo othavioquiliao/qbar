@@ -23,10 +23,12 @@ cp scripts/waybar-llm-usage.sh ~/.config/waybar/scripts/waybar-llm-usage.sh
 cp scripts/codex-quota.py ~/.config/waybar/scripts/codex-quota.py
 cp scripts/antigravity-waybar-usage-login ~/.config/waybar/scripts/antigravity-waybar-usage-login
 cp scripts/antigravity-waybar-usage-fetch ~/.config/waybar/scripts/antigravity-waybar-usage-fetch
+cp scripts/llm-usage-menu ~/.config/waybar/scripts/llm-usage-menu
 chmod +x ~/.config/waybar/scripts/waybar-llm-usage.sh
 chmod +x ~/.config/waybar/scripts/codex-quota.py
 chmod +x ~/.config/waybar/scripts/antigravity-waybar-usage-login
 chmod +x ~/.config/waybar/scripts/antigravity-waybar-usage-fetch
+chmod +x ~/.config/waybar/scripts/llm-usage-menu
 ```
 
 ---
@@ -46,7 +48,7 @@ Open `~/.config/waybar/config.jsonc` and add:
   "return-type": "json",
   "interval": 60,
   "markup": "pango",
-  "on-click-right": "omarchy-launch-floating-terminal-with-presentation 'claude'"
+  "on-click-right": "$HOME/.config/waybar/scripts/llm-usage-menu"
 }
 ```
 
