@@ -71,6 +71,23 @@ This repo documents how to reproduce the Waybar module that shows **Claude Code*
 
 ---
 
+## Files
+
+- `scripts/waybar-llm-usage.sh`
+- `scripts/codex-quota.py`
+- `scripts/antigravity-waybar-usage-login`
+- `scripts/antigravity-waybar-usage-fetch`
+- `scripts/llm-usage-menu`
+- `snippets/waybar-config.jsonc`
+- `snippets/waybar-style.css`
+- `docs/AGENTS_GUIDE.md` (for agents)
+- `docs/PREREQS.md`
+- `docs/TROUBLESHOOTING.md`
+- `docs/ANTIGRAVITY_MANAGER.md`
+- `SETUP.md`
+
+---
+
 ## Troubleshooting
 
 ### Codex stays at 99–100%

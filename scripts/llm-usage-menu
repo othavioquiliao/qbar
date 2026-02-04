@@ -2,6 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+export PATH="$HOME/.local/share/omarchy/bin:$PATH"
 MENU_BIN="omarchy-launch-walker"
 
 if ! command -v "$MENU_BIN" >/dev/null 2>&1; then
