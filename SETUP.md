@@ -45,7 +45,8 @@ Open `~/.config/waybar/config.jsonc` and add:
   "exec": "$HOME/.config/waybar/scripts/waybar-llm-usage.sh",
   "return-type": "json",
   "interval": 60,
-  "markup": "pango"
+  "markup": "pango",
+  "on-click-right": "omarchy-launch-floating-terminal-with-presentation 'claude'"
 }
 ```
 
