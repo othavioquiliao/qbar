@@ -29,6 +29,8 @@ except Exception:
     raw=sys.stdin.read()
     print("(failed to parse tooltip)")
     print(raw)'
+# don't let parse errors kill the terminal
+true
 
 echo
 read -p "Press Enter..."

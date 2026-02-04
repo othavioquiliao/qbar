@@ -183,7 +183,7 @@ line_fmt() {
   local bar eta
   bar=$(bar_5pct "$pct")
   eta=$(human_eta "$reset_iso")
-  printf "%-18s %s - %3s%% - %-7s (%s)" "$label" "$bar" "$pct" "$eta" "$reset_hm"
+  printf "%-16s %s - %3s%% - %-7s (%s)" "$label" "$bar" "$pct" "$eta" "$reset_hm"
 }
 
 T="━━━ Claude (${C_PLAN}) ━━━\\n"
