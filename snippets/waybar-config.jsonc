@@ -1,0 +1,7 @@
+  "custom/llm-usage": {
+    "format": "{}",
+    "exec": "$HOME/.config/waybar/scripts/waybar-llm-usage.sh",
+    "return-type": "json",
+    "interval": 60,
+    "markup": "pango"
+  }

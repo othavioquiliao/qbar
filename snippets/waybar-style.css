@@ -1,0 +1,9 @@
+#custom-llm-usage {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: 500;
+}
+
+#custom-llm-usage span {
+  padding: 0 2px;
+}
