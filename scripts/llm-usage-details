@@ -33,4 +33,4 @@ except Exception:
 true
 
 echo
-read -p "Press Enter..."
+read -p "Press Enter..." </dev/tty
