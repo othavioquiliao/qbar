@@ -14,6 +14,16 @@ ensure_bun() {
   if command -v bun >/dev/null 2>&1; then
     return 0
   fi
+  if command -v mise >/dev/null 2>&1; then
+    if mise which bun >/dev/null 2>&1; then
+      export PATH="$HOME/.local/share/mise/shims:$PATH"
+      return 0
+    fi
+  fi
+  if [ -x "$HOME/.local/share/mise/shims/bun" ]; then
+    export PATH="$HOME/.local/share/mise/shims:$PATH"
+    return 0
+  fi
   echo "Bun not found. Installing via Omarchy..."
   omarchy-install-dev-env bun
 }
@@ -66,11 +76,11 @@ case "$choice" in
   "Show Details")
     "$SCRIPT_DIR/llm-usage-open-terminal" "$SCRIPT_DIR/llm-usage-details" ;;
   "Claude Login")
-    omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_bun); $(declare -f ensure_pkg); $(declare -f login_claude); login_claude'" ;;
+    "$SCRIPT_DIR/llm-usage-open-terminal" "bash -lc '$(declare -f ensure_bun); $(declare -f ensure_pkg); $(declare -f login_claude); login_claude'" ;;
   "Codex Login")
-    omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_pkg); $(declare -f login_codex); login_codex'" ;;
+    "$SCRIPT_DIR/llm-usage-open-terminal" "bash -lc '$(declare -f ensure_pkg); $(declare -f login_codex); login_codex'" ;;
   "Antigravity Login")
-    omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_bun); $(declare -f ensure_pkg); $(declare -f login_antigravity); login_antigravity'" ;;
+    "$SCRIPT_DIR/llm-usage-open-terminal" "bash -lc '$(declare -f ensure_bun); $(declare -f ensure_pkg); $(declare -f login_antigravity); login_antigravity'" ;;
   *)
     exit 0 ;;
 esac
