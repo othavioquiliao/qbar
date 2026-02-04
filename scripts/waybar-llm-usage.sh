@@ -224,6 +224,25 @@ if [ "$AG_ACCOUNT" = "?" ]; then
   fi
 fi
 
+# normalize cloud percentages (0-1 -> 0-100)
+normalize_pct() {
+  local v="$1"
+  if [ -z "$v" ] || [ "$v" = "?" ]; then
+    echo "$v"; return
+  fi
+  if awk "BEGIN{exit !($v<=1)}" 2>/dev/null; then
+    awk "BEGIN{printf \"%.0f\", $v*100}"
+  else
+    awk "BEGIN{printf \"%.0f\", $v}"
+  fi
+}
+AG_CLAUDE=$(normalize_pct "$AG_CLAUDE")
+AG_GEM_PRO=$(normalize_pct "$AG_GEM_PRO")
+AG_GEM_FLASH=$(normalize_pct "$AG_GEM_FLASH")
+[ -n "$AG_CLAUDE_RESET_ISO" ] && AG_CLAUDE_RESET=$(date -d "$AG_CLAUDE_RESET_ISO" +"%H:%M" 2>/dev/null || echo "?")
+[ -n "$AG_GEM_PRO_RESET_ISO" ] && AG_GEM_PRO_RESET=$(date -d "$AG_GEM_PRO_RESET_ISO" +"%H:%M" 2>/dev/null || echo "?")
+[ -n "$AG_GEM_FLASH_RESET_ISO" ] && AG_GEM_FLASH_RESET=$(date -d "$AG_GEM_FLASH_RESET_ISO" +"%H:%M" 2>/dev/null || echo "?")
+
 if [ "$AG_ACCOUNT" != "?" ]; then
   T+="\\n━━━ Antigravity (${AG_ACCOUNT}) ━━━\\n"
   T+="$(line_fmt "Claude Opus" "$AG_CLAUDE" "$AG_CLAUDE_RESET_ISO" "$AG_CLAUDE_RESET")\\n"
