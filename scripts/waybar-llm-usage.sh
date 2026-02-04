@@ -183,10 +183,10 @@ line_fmt() {
   local bar eta
   bar=$(bar_5pct "$pct")
   eta=$(human_eta "$reset_iso")
-  printf "%-20.20s %s - %3s%% - %-7s (%s)" "$label" "$bar" "$pct" "$eta" "$reset_hm"
+  printf "%-14.14s %s - %3s%% - %-7s (%s)" "$label" "$bar" "$pct" "$eta" "$reset_hm"
 }
 
-T="<span font_family='monospace'>━━━ Claude (${C_PLAN}) ━━━\\n"
+T="━━━ Claude (${C_PLAN}) ━━━\\n"
 if [ "$C_PLAN" = "token expired" ]; then
   T+="⚠️ Token expirou. Faça login no Claude CLI.\\n"
 fi
@@ -215,7 +215,6 @@ if [ "$AG_ACCOUNT" != "?" ]; then
   T+="$(line_fmt "Gemini Pro" "$AG_GEM_PRO" "$AG_GEM_PRO_RESET_ISO" "$AG_GEM_PRO_RESET")\\n"
   T+="$(line_fmt "Gemini Flash" "$AG_GEM_FLASH" "$AG_GEM_FLASH_RESET_ISO" "$AG_GEM_FLASH_RESET")"
 fi
-T+="</span>"
 
 # convert literal \n to real newlines for tooltip rendering
 T=${T//\\n/$'\n'}

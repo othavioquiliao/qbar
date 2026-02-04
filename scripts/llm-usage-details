@@ -4,30 +4,29 @@ set -u
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 OUT=$($SCRIPT_DIR/waybar-llm-usage.sh)
-printf '%s' "$OUT" | python3 -c 'import json,sys,re
+export OUT
+python3 - <<'PY'
+import json,os,re
+raw=os.environ.get("OUT", "")
 try:
-    data=json.load(sys.stdin)
+    data=json.loads(raw)
     tip=data.get("tooltip", "")
     tip=tip.replace("\\n", "\n").replace("\\r", "")
-    # convert pango spans to ANSI colors
     def span_to_ansi(m):
         color=m.group(1).lower()
         return {
-            "a6e3a1": "\x1b[32m",  # green
-            "f9e2af": "\x1b[33m",  # yellow
-            "fab387": "\x1b[33m",  # orange -> yellow
-            "f38ba8": "\x1b[31m",  # red
-            "cdd6f4": "\x1b[37m",  # light gray
-            "6c7086": "\x1b[90m",  # dim gray
+            "a6e3a1": "\x1b[32m",
+            "f9e2af": "\x1b[33m",
+            "fab387": "\x1b[33m",
+            "f38ba8": "\x1b[31m",
+            "cdd6f4": "\x1b[37m",
+            "6c7086": "\x1b[90m",
         }.get(color, "")
     tip=re.sub(r"<span[^>]*foreground=['\"]#([0-9a-fA-F]{6})['\"][^>]*>", span_to_ansi, tip)
     tip=tip.replace("</span>", "\x1b[0m")
-    # strip any remaining tags
     tip=re.sub(r"<[^>]+>", "", tip)
     print(tip+"\x1b[0m")
 except Exception:
-    raw=sys.stdin.read()
     print("(failed to parse tooltip)")
-    print(raw)'
-# don't let parse errors kill the terminal
-true
+    print(raw)
+PY
