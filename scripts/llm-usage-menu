@@ -18,34 +18,55 @@ ensure_bun() {
   omarchy-install-dev-env bun
 }
 
-install_antigravity_usage() {
+ensure_pkg() {
+  local bin="$1"
+  local pkg="$2"
+  if command -v "$bin" >/dev/null 2>&1; then
+    return 0
+  fi
+  echo "Installing $pkg via yay..."
+  yay -S --needed "$pkg"
+}
+
+login_antigravity() {
+  ensure_pkg antigravity antigravity
   ensure_bun
-  echo "Installing antigravity-usage..."
-  bun i -g antigravity-usage
+  if ! command -v antigravity-usage >/dev/null 2>&1; then
+    echo "Installing antigravity-usage..."
+    bun i -g antigravity-usage
+  fi
+  "$SCRIPT_DIR/antigravity-waybar-usage-login"
+}
+
+login_claude() {
+  ensure_pkg claude claude-code
+  claude
+}
+
+login_codex() {
+  ensure_pkg codex codex
+  codex
 }
 
 OPTIONS=$(cat <<'EOF'
 Show Details
 Claude Login
-Antigravity Cloud Login
-Install/Update Antigravity Cloud
-Reload Waybar
+Codex Login
+Antigravity Login
 EOF
 )
 
-choice=$(echo "$OPTIONS" | $MENU_BIN --dmenu --width 300 --minheight 1 --maxheight 320 -p "LLM Usage" 2>/dev/null || true)
+choice=$(echo "$OPTIONS" | $MENU_BIN --dmenu --width 280 --minheight 1 --maxheight 320 -p "LLM Usage" 2>/dev/null || true)
 
 case "$choice" in
   "Show Details")
-    omarchy-launch-floating-terminal-with-presentation "$SCRIPT_DIR/waybar-llm-usage.sh && echo && read -p 'Press Enter...'" ;;
+    omarchy-launch-floating-terminal-with-presentation "bash -lc '$SCRIPT_DIR/waybar-llm-usage.sh; echo; read -p \"Press Enter...\"'" ;;
   "Claude Login")
-    omarchy-launch-floating-terminal-with-presentation "claude" ;;
-  "Antigravity Cloud Login")
-    omarchy-launch-floating-terminal-with-presentation "$SCRIPT_DIR/antigravity-waybar-usage-login" ;;
-  "Install/Update Antigravity Cloud")
-    omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_bun); $(declare -f install_antigravity_usage); install_antigravity_usage'" ;;
-  "Reload Waybar")
-    pkill -USR2 waybar ;;
+    omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_bun); $(declare -f ensure_pkg); $(declare -f login_claude); login_claude'" ;;
+  "Codex Login")
+    omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_pkg); $(declare -f login_codex); login_codex'" ;;
+  "Antigravity Login")
+    omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_bun); $(declare -f ensure_pkg); $(declare -f login_antigravity); login_antigravity'" ;;
   *)
     exit 0 ;;
 esac
