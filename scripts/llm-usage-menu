@@ -41,6 +41,7 @@ ensure_pkg() {
 login_antigravity() {
   ensure_pkg antigravity aur/antigravity
   ensure_bun
+  export PATH="$HOME/.cache/.bun/bin:$PATH"
   if ! command -v antigravity-usage >/dev/null 2>&1; then
     echo "Installing antigravity-usage..."
     bun i -g antigravity-usage
