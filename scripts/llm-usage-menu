@@ -64,7 +64,7 @@ choice=$(echo "$OPTIONS" | $MENU_BIN --dmenu --width 280 --minheight 1 --maxheig
 
 case "$choice" in
   "Show Details")
-    omarchy-launch-floating-terminal-with-presentation "bash -lc '$SCRIPT_DIR/waybar-llm-usage.sh | jq -r .tooltip; echo; read -p \"Press Enter...\"'" ;;
+    omarchy-launch-floating-terminal-with-presentation "bash -lc '$SCRIPT_DIR/waybar-llm-usage.sh | python3 - <<\"PY\"\nimport json,sys\ntry:\n  data=json.load(sys.stdin)\n  print(data.get(\"tooltip\", \"\"))\nexcept Exception as e:\n  print(\"(failed to parse tooltip)\")\nPY\n; echo; read -p \"Press Enter...\"'" ;;
   "Claude Login")
     omarchy-launch-floating-terminal-with-presentation "bash -lc '$(declare -f ensure_bun); $(declare -f ensure_pkg); $(declare -f login_claude); login_claude'" ;;
   "Codex Login")
