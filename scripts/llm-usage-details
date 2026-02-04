@@ -8,12 +8,23 @@ printf '%s' "$OUT" | python3 -c 'import json,sys,re
 try:
     data=json.load(sys.stdin)
     tip=data.get("tooltip", "")
-    tip=tip.replace("\\n", "\n")
-    tip=tip.replace("\\r", "")
-    # strip pango spans for terminal readability
-    tip=re.sub(r"<span[^>]*>", "", tip)
-    tip=tip.replace("</span>", "")
-    print(tip)
+    tip=tip.replace("\\n", "\n").replace("\\r", "")
+    # convert pango spans to ANSI colors
+    def span_to_ansi(m):
+        color=m.group(1).lower()
+        return {
+            "a6e3a1": "\x1b[32m",  # green
+            "f9e2af": "\x1b[33m",  # yellow
+            "fab387": "\x1b[33m",  # orange -> yellow
+            "f38ba8": "\x1b[31m",  # red
+            "cdd6f4": "\x1b[37m",  # light gray
+            "6c7086": "\x1b[90m",  # dim gray
+        }.get(color, "")
+    tip=re.sub(r"<span[^>]*foreground=['\"]#([0-9a-fA-F]{6})['\"][^>]*>", span_to_ansi, tip)
+    tip=tip.replace("</span>", "\x1b[0m")
+    # strip any remaining tags
+    tip=re.sub(r"<[^>]+>", "", tip)
+    print(tip+"\x1b[0m")
 except Exception:
     raw=sys.stdin.read()
     print("(failed to parse tooltip)")
