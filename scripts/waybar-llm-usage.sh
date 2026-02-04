@@ -204,7 +204,12 @@ T+="$(line_fmt "Codex 7d" "$X7_REM" "$X7_RESET_ISO" "$X7_RESET")\\n"
 # Fallback to cloud if local failed
 if [ "$AG_ACCOUNT" = "?" ]; then
   AG_CLOUD=$($AG_FETCH 2>/dev/null)
-  if echo "$AG_CLOUD" | jq -e '.snapshot' >/dev/null 2>&1; then
+  if echo "$AG_CLOUD" | jq -e '.models' >/dev/null 2>&1; then
+    AG_ACCOUNT=$(echo "$AG_CLOUD" | jq -r '.email // .accountEmail // "?"')
+    AG_CLAUDE=$(echo "$AG_CLOUD" | jq -r '.models[]? | select(.label | test("Claude"; "i")) | .remainingPercentage // empty' | head -1)
+    AG_GEM_PRO=$(echo "$AG_CLOUD" | jq -r '.models[]? | select(.label | test("Gemini.*Pro"; "i")) | .remainingPercentage // empty' | head -1)
+    AG_GEM_FLASH=$(echo "$AG_CLOUD" | jq -r '.models[]? | select(.label | test("Gemini.*Flash"; "i")) | .remainingPercentage // empty' | head -1)
+  elif echo "$AG_CLOUD" | jq -e '.snapshot' >/dev/null 2>&1; then
     AG_ACCOUNT=$(echo "$AG_CLOUD" | jq -r '.email // .accountEmail // "?"')
     # Map snapshot models if present
     AG_CLAUDE=$(echo "$AG_CLOUD" | jq -r '.snapshot.models[]? | select(.label | test("Claude"; "i")) | .remainingPercentage // empty' | head -1)
