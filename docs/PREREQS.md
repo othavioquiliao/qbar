@@ -1,25 +1,18 @@
-# Prerequisites Checklist
+# Prerequisites
 
 ## System
-- Linux + Waybar installed
-- `jq`, `curl`, `python3`, `lsof`, `expect` installed (expect used for automated Claude login)
+- Linux + Waybar
+- `bash`, `jq`, `curl`, `python3`, `lsof`
 
-## Claude Code (Anthropic)
+## Claude Code
 - `claude` CLI installed
-- Logged in (OAuth tokens present)
-  - File: `~/.claude/.credentials.json`
-  - Required scope: `user:profile`
+- Login happens in CLI (`/login`)
 
-## Codex CLI (OpenAI)
-- `codex` CLI installed (via npm or bun)
-- Logged in with ChatGPT OAuth or API key
-- Binary path known (example): `~/.cache/.bun/bin/codex`
-- Logs exist under `~/.codex/sessions/`
+## Codex
+- `codex` CLI installed (bun or npm)
+- Login via CLI
 
 ## Antigravity
 - Antigravity IDE installed
-- Antigravity IDE **running** (language server active)
-- Optional Cloud fallback: `npm i -g antigravity-usage` + `antigravity-waybar-usage-login`
-
-## Optional (Quality)
-- Catppuccin theme installed (for visual consistency)
+- IDE running for local LSP
+- Optional cloud fallback via `antigravity-usage`

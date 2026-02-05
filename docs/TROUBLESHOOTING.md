@@ -1,51 +1,26 @@
-# Troubleshooting (Advanced)
+# Troubleshooting
 
-## Codex stays at 99–100%
-**Cause:** `rate_limits` not written yet.
+## Claude login doesn’t update Waybar
+- The login menu watches `~/.claude/.credentials.json`
+- If it doesn’t update, run:
+```bash
+pkill -USR2 waybar
+```
 
-**Fix:**
-1. Run `codex` and type `/status` once.
-2. Wait 2 minutes for cache refresh.
-3. Ensure `CODEX_BIN` is correct in the script.
+## Codex logout still shows
+- Codex output is cached in `/tmp/codex-quota.json`
+- Logout removes it, but if it persists:
+```bash
+rm -f /tmp/codex-quota.json
+pkill -USR2 waybar
+```
 
----
-
-## Claude shows 0% or reset shows "rolling"
-**Cause:** The 5h window is rolling and starts when usage occurs. When idle, Anthropic returns `resets_at = null`.
-
-**Fix:**
-- This is expected. It will show a fixed reset time after the next usage event.
-- Check weekly line (7d) for a stable reset date.
-
----
-
-## Antigravity shows ?
-**Cause:** IDE not running or LSP not reachable.
-
-**Fix:**
-- Start Antigravity IDE
-- Ensure `language_server_linux` is running
-
----
+## Antigravity missing
+- If IDE is closed, Cloud fallback must be logged in
+```bash
+~/.config/waybar/scripts/antigravity-waybar-usage-login
+```
 
 ## Tooltip alignment off
-**Cause:** Waybar font changes or CSS overrides.
-
-**Fix:**
-- Force monospaced font in `style.css` for `#custom-llm-usage`
-
----
-
-## Waybar not updating
-**Fix:**
-- `pkill -USR2 waybar`
-- Confirm `interval` in config.jsonc
-- Test script manually
-
----
-
-## Debug commands
-```bash
-~/.local/bin/waybar-llm-usage.sh
-CODEX_BIN=~/.cache/.bun/bin/codex ~/.local/bin/codex-quota.py --json --fresh
-```
+- Your Waybar font may be proportional
+- Use a monospaced font in your own CSS if needed
