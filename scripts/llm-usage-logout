@@ -10,7 +10,7 @@ has_claude() {
 }
 
 has_codex() {
-  [ -f "$HOME/.codex/auth.json" ] || [ -d "$HOME/.codex" ]
+  [ -f "$HOME/.codex/auth.json" ]
 }
 
 has_antigravity() {

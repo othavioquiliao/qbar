@@ -72,8 +72,11 @@ login_codex() {
     echo "Installing @openai/codex..."
     bun i -g @openai/codex
   fi
+
+  # watch for auth.json and refresh Waybar
+  (while [ ! -f "$HOME/.codex/auth.json" ]; do sleep 1; done; pkill -USR2 waybar || true) &
+
   codex
-  pkill -USR2 waybar || true
 }
 
 OPTIONS=$(cat <<'EOF'
