@@ -31,6 +31,7 @@ This repo documents how to reproduce the Waybar module that shows **Claude Code*
 - `curl`
 - `python3`
 - `lsof`
+- `expect` (for automated Claude login)
 
 ### Claude Code
 

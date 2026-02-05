@@ -52,8 +52,7 @@ login_antigravity() {
 
 login_claude() {
   ensure_pkg claude aur/claude-code
-  echo "Use /login e escolha a opção 1 (assinatura)."
-  claude
+  "$SCRIPT_DIR/claude-login-expect"
   pkill -USR2 waybar || true
 }
 
