@@ -2,7 +2,7 @@
 
 ## System
 - Linux + Waybar installed
-- `jq`, `curl`, `python3`, `lsof` installed
+- `jq`, `curl`, `python3`, `lsof`, `expect` installed (expect used for automated Claude login)
 
 ## Claude Code (Anthropic)
 - `claude` CLI installed
