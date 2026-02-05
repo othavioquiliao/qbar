@@ -52,11 +52,8 @@ login_antigravity() {
 
 login_claude() {
   ensure_pkg claude aur/claude-code
-  if [ ! -f "$HOME/.claude/.credentials.json" ]; then
-    claude setup-token
-  else
-    claude
-  fi
+  echo "Use /login e escolha a opção 1 (assinatura)."
+  claude
   pkill -USR2 waybar || true
 }
 
